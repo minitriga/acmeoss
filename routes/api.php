@@ -13,13 +13,13 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('/tenants/{tenant}', 'NSO@create_tenant');
-Route::post('/tenants/{tenant}/networks/{network}', 'NSO@create_network');
-Route::post('/tenants/{tenant}/services/{service}', 'NSO@create_service');
+Route::post('/tenants/{tenant}', 'NSO@CreateTenant');
+Route::post('/tenants/{tenant}/networks/{network}', 'NSO@CreateNetwork');
+Route::post('/tenants/{tenant}/services/{service}', 'NSO@CreateService');
 
-Route::delete('/tenants/{tenant}', 'NSO@delete_tenant');
-Route::delete('/tenants/{tenant}/networks/{network}', 'NSO@delete_network');
-Route::delete('/tenants/{tenant}/services/{service}', 'NSO@delete_service');
+Route::delete('/tenants/{tenant}', 'NSO@DeleteTenant');
+Route::delete('/tenants/{tenant}/networks/{network}', 'NSO@DeleteNetwork');
+Route::delete('/tenants/{tenant}/services/{service}', 'NSO@DeleteService');
 
 Route::get('/user', function (Request $request) {
     return $request->user();

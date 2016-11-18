@@ -7,7 +7,7 @@ use GuzzleHttp;
 
 class NSO extends Controller
 {
-    private function nso_get_data($url)
+    private function NSOGetData($url)
     {
         $client = new GuzzleHttp\Client();
 
@@ -27,7 +27,7 @@ class NSO extends Controller
         }
     }
 
-    private function nso_post_data($url, $data)
+    private function NSOPostData($url, $data)
     {
         $client = new GuzzleHttp\Client();
 
@@ -44,7 +44,7 @@ class NSO extends Controller
         return $result->getStatusCode();
     }
 
-    private function nso_delete($url)
+    private function NSODelete($url)
     {
         $client = new GuzzleHttp\Client();
 
@@ -61,7 +61,7 @@ class NSO extends Controller
         }
     }
 
-    private function os_get_segments()
+    private function OpenStackGetSegments()
     {
         $client = new GuzzleHttp\Client();
 
@@ -131,29 +131,29 @@ EOL;
     }
 
 
-    public function list_tenants()
+    public function ListTenants()
     {
         $tenants = [];
 
         $url = '/api/running/devices/device/' . $_ENV['NSO_ESC'] . '/config/esc_datamodel/tenants';
 
-        foreach ($this->nso_get_data($url)['esc:tenants']['tenant'] as $tenant)
+        foreach ($this->NSOGetData($url)['esc:tenants']['tenant'] as $tenant)
             if ($tenant['name'] != 'admin') $tenants[] = $tenant['name'];
 
         return view('tenants', ['tenants' => $tenants]);
     }
 
-    public function get_tenant($tenant)
+    public function GetTenant($tenant)
     {
         $networks = [];
         $deployments = [];
         $services = [];
 
-        $segments = $this->os_get_segments();
+        $segments = $this->OpenStackGetSegments();
 
-        $tenant_data = $this->nso_get_data('/api/running/devices/device/' . $_ENV['NSO_ESC']
+        $tenant_data = $this->NSOGetData('/api/running/devices/device/' . $_ENV['NSO_ESC']
             . '/config/esc_datamodel/tenants/tenant/' . $tenant);
-        $nsr_data = $this->nso_get_data('/api/running/nfvo/nsr?deep');
+        $nsr_data = $this->NSOGetData('/api/running/nfvo/nsr?deep');
 
         if (array_key_exists('networks', $tenant_data['esc:tenant'])) {
             foreach ($tenant_data['esc:tenant']['networks']['network'] as $network) {
@@ -183,41 +183,41 @@ EOL;
             'tenant' => $tenant, 'services' => $services]);
     }
 
-    public function delete_network($tenant, $network)
+    public function DeleteNetwork($tenant, $network)
     {
         $url = "/api/running/devices/device/" . $_ENV['NSO_ESC'] .
             "/config/esc:esc_datamodel/tenants/tenant/$tenant/" .
             "networks/network/$network";
 
-        return $this->nso_delete($url);
+        return $this->NSODelete($url);
     }
 
-    public function delete_tenant($tenant)
+    public function DeleteTenant($tenant)
     {
         $url = "/api/running/devices/device/" . $_ENV['NSO_ESC'] .
             "/config/esc:esc_datamodel/tenants/tenant/$tenant";
 
-        return $this->nso_delete($url);
+        return $this->NSODelete($url);
     }
 
-    public function delete_service($tenant, $service)
+    public function DeleteService($tenant, $service)
     {
         $url = "/api/running/nfvo/nsr/esc/nsr/$tenant,$service,{$_ENV['NSO_ESC']}";
 
-        return $this->nso_delete($url);
+        return $this->NSODelete($url);
     }
 
-    public function create_tenant($tenant)
+    public function CreateTenant($tenant)
     {
         $url = "/api/running/devices/device/" . $_ENV['NSO_ESC'] .
             "/config/esc:esc_datamodel/tenants";
 
         $data = '{ "tenant": [{ "name": "' . $tenant . '" }] }';
 
-        return response('', $this->nso_post_data($url, $data));
+        return response('', $this->NSOPostData($url, $data));
     }
 
-    public function create_network(Request $request, $tenant, $network)
+    public function CreateNetwork(Request $request, $tenant, $network)
     {
         $url = "/api/running/devices/device/" . $_ENV['NSO_ESC'] .
             "/config/esc:esc_datamodel/tenants/tenant/$tenant/" .
@@ -236,10 +236,10 @@ EOL;
         $data = $data . '"subnet": [{ "name": "' . $network . '", "ipversion": "ipv4", "dhcp": false, "address": "' .
             $_ENV['OS_DEF_NET'] . '", "netmask": "' . $_ENV['OS_DEF_MASK'] . '", "no_gateway": true }] }]}';
 
-        return response('', $this->nso_post_data($url, $data));
+        return response('', $this->NSOPostData($url, $data));
     }
 
-    public function create_service(Request $request, $tenant, $servicename)
+    public function CreateService(Request $request, $tenant, $servicename)
     {
         $req = json_decode($request->getContent(false), true);
 
@@ -264,12 +264,12 @@ EOL;
         $vlr_url = 'api/running/nfvo/vlr/esc';
         $vlr_data = '{ "vlr": [ { "id": "' . $network . '" } ] }';
 
-        $vlr_res = $this->nso_post_data($vlr_url, $vlr_data);
+        $vlr_res = $this->NSOPostData($vlr_url, $vlr_data);
         if ($vlr_res != 201 && $vlr_res != 409) {
             return response('', 500);
         }
 
         $url = '/api/running/nfvo/nsr/esc';
-        return response('', $this->nso_post_data($url, $query));
+        return response('', $this->NSOPostData($url, $query));
     }
 }
