@@ -42,7 +42,7 @@
                         $.ajax({
                             url: '/api/tenants/{{$tenant}}/networks/' + network,
                             type: 'DELETE',
-                            success: function (result) {
+                            success: function () {
                                 $('#tr_net_' + network).remove();
                                 $.notify({
                                     message: 'Сеть ' + network + ' удалена.'
@@ -50,7 +50,7 @@
                                     type: 'success'
                                 });
                             },
-                            error: function (result) {
+                            error: function () {
                                 $.notify({
                                     message: 'Ошибка при удалении сети ' + network + '.'
                                 }, {
@@ -81,7 +81,7 @@
                         $.ajax({
                             url: '/api/tenants/{{$tenant}}/services/' + deployment,
                             type: 'DELETE',
-                            success: function (result) {
+                            success: function () {
                                 $('#tr_dep_' + deployment).remove();
                                 $.notify({
                                     message: 'Сервис ' + deployment + ' удален.'
@@ -89,7 +89,7 @@
                                     type: 'success'
                                 });
                             },
-                            error: function (result) {
+                            error: function () {
                                 $.notify({
                                     message: 'Ошибка при удалении сервиса ' + deployment + '.'
                                 }, {
@@ -107,7 +107,7 @@
                     segment + '<\/td><td><button type=\"button\" class=\"btn btn-danger\" onclick=\"confirmNetDelete(' +
                     '\'' + network + '\');\"><span class=\"glyphicon glyphicon-remove\" ' +
                     'aria-hidden=\"true\"><\/span><\/button><\/td><\/tr>');
-            $servicenet.append('<option val="' + network + '">' + network + '</option>');
+            $servicenet.append('<option value="' + network + '">' + network + '</option>');
         }
 
         function addServiceToTable(name, network, service) {
@@ -130,7 +130,7 @@
                 url: '/api/tenants/{{$tenant}}/networks/' + network,
                 type: 'POST',
                 data: req_data,
-                success: function (result) {
+                success: function () {
                     addNetworkToTable(network, real_segment);
                     $.notify({
                         message: 'Сеть ' + network + ' добавлена.'
@@ -138,7 +138,7 @@
                         type: 'success'
                     });
                 },
-                error: function (result) {
+                error: function () {
                     $.notify({
                         message: 'Ошибка при добавлении сети ' + network + '.'
                     }, {
@@ -155,7 +155,7 @@
                 url: '/api/tenants/{{$tenant}}/services/' + name,
                 type: 'POST',
                 data: req_data,
-                success: function (result) {
+                success: function () {
                     addServiceToTable(name, net, type);
                     $.notify({
                         message: 'Сервис ' + name + ' добавлен.'
@@ -163,7 +163,7 @@
                         type: 'success'
                     });
                 },
-                error: function (result) {
+                error: function () {
                     $.notify({
                         message: 'Ошибка при добавлении сервиса ' + name + '.'
                     }, {
@@ -235,13 +235,13 @@
 
     <div style="margin-top: 80px"></div>
 
-    <h3>Сервисы</h3>
+    <h3>Сервисы (NSR)</h3>
     <table class="table" id="servicetable">
         <thead>
         <tr>
             <th style="width: 33%">Наименование</th>
             <th style="width: 33%">Сеть</th>
-            <th style="width: 33%">Сервис</th>
+            <th style="width: 33%">Сервис (NSD)</th>
             <th></th>
         </tr>
         </thead>
@@ -279,7 +279,7 @@
                             <label for="servicetype">Тип сервиса</label>
                             <select class="form-control" id="servicetype">
                                 @foreach ($services as $service)
-                                    <option val="{{$service}}">{{$service}}</option>
+                                    <option value="{{$service}}">{{$service}}</option>
                                 @endforeach
                             </select>
                         </div>
