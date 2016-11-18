@@ -176,7 +176,7 @@ EOL;
         }
 
         foreach (array_diff(scandir(__DIR__ . '/../../../storage/app/service-templates'), array('..', '.')) as $svc) {
-            $services[] = str_replace(".json", "", $svc);
+            if(preg_match("/\.json$/", $svc)) $services[] = str_replace(".json", "", $svc);
         }
 
         return view('tenant', ['networks' => $networks, 'deployments' => $deployments,
