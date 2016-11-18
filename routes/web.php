@@ -11,9 +11,9 @@
 |
 */
 
-Route::get('/clients/', 'nso@list_tenants');
+Route::get('/clients/', 'NSO@list_tenants');
 
-Route::get('/clients/{tenant}', 'nso@get_tenant');
+Route::get('/clients/{tenant}', 'NSO@get_tenant');
 
 Route::get('/', function () {
     return view('welcome');

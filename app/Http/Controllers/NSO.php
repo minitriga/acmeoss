@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use GuzzleHttp;
 
-class nso extends Controller
+class NSO extends Controller
 {
     private function nso_get_data($url)
     {
