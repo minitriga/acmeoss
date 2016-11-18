@@ -28,7 +28,7 @@
                         $.ajax({
                             url: '/api/tenants/' + tenant,
                             type: 'DELETE',
-                            success: function (result) {
+                            success: function () {
                                 $('#tr_' + tenant).remove();
                                 $.notify({
                                     message: 'Клиент ' + tenant + ' удален.'
@@ -36,7 +36,7 @@
                                     type: 'success'
                                 });
                             },
-                            error: function (result) {
+                            error: function () {
                                 $.notify({
                                     message: 'Ошибка при удалении клиента ' + tenant + '.'
                                 }, {
@@ -53,7 +53,7 @@
             $.ajax({
                 url: '/api/tenants/' + tenant,
                 type: 'POST',
-                success: function (result) {
+                success: function () {
                     addTenantToTable(tenant);
                     $.notify({
                         message: 'Клиент ' + tenant + ' добавлен.'
@@ -61,7 +61,7 @@
                         type: 'success'
                     });
                 },
-                error: function (result) {
+                error: function () {
                     $.notify({
                         message: 'Ошибка при добавлении клиента ' + tenant + '.'
                     }, {
