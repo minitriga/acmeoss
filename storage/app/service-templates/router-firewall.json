@@ -1,0 +1,61 @@
+{
+	"nsr": [{
+		"tenant": "@TENANT@",
+		"deployment-name": "@SERVICENAME@",
+		"esc": "esc0",
+		"username": "admin",
+		"nsd": "router-firewall",
+		"vnfr": [{
+			"id": "ASAv",
+			"vnfd-flavor": "basic",
+			"instantiation-level": "basic",
+			"vdu": [{
+				"id": "firewall",
+				"managed": [null],
+				"image-name": "esc.ASAv",
+				"flavor-name": "esc.ASAv",
+				"bootup-time": 300,
+				"recovery-wait-time": 300,
+				"day0": [{
+					"destination": "day0-config",
+					"url": "http://10.128.128.3/asa-day0-with_csr.conf"
+				}],
+				"authgroup": "asa"
+			}]
+		}, {
+			"id": "CSR1kv",
+			"vnfd-flavor": "basic",
+			"instantiation-level": "basic",
+			"vdu": [{
+				"id": "router",
+				"managed": [null],
+				"image-name": "esc.CSR1kv",
+				"flavor-name": "esc.CSR1kv",
+				"bootup-time": 300,
+				"recovery-wait-time": 300,
+				"day0": [{
+					"destination": "iosxe_config.txt",
+					"url": "http://10.128.128.3/csr-day0-with_asa.conf"
+				}],
+				"authgroup": "csr"
+			}]
+		}],
+		"virtual-link": [{
+			"id": "glue-net",
+			"subnet": {
+				"network": "10.0.0.0/24",
+				"no-gateway": [null]
+			}
+		}],
+		"service-access-point": [{
+			"id": "inside",
+			"vlr": "@NETWORK@"
+		}, {
+			"id": "mgmt",
+			"vlr": "VNF-MGMT"
+		}, {
+			"id": "outside",
+			"vlr": "INTERNET"
+		}]
+	}]
+}

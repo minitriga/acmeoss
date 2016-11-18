@@ -1,0 +1,37 @@
+{
+	"nsr": [{
+		"tenant": "@TENANT@",
+		"deployment-name": "@SERVICENAME@",
+		"esc": "esc0",
+		"username": "admin",
+		"nsd": "router",
+		"vnfr": [{
+			"id": "CSR1kv",
+			"vnfd-flavor": "basic",
+			"instantiation-level": "basic",
+			"vdu": [{
+				"id": "router",
+				"managed": [null],
+				"image-name": "esc.CSR1kv",
+				"flavor-name": "esc.CSR1kv",
+				"bootup-time": 300,
+				"recovery-wait-time": 300,
+				"day0": [{
+					"destination": "iosxe_config.txt",
+					"url": "http://10.128.128.3/csr-day0-standalone.conf"
+				}],
+				"authgroup": "csr"
+			}]
+		}],
+		"service-access-point": [{
+			"id": "inside",
+			"vlr": "@NETWORK@"
+		}, {
+			"id": "mgmt",
+			"vlr": "VNF-MGMT"
+		}, {
+			"id": "outside",
+			"vlr": "INTERNET"
+		}]
+	}]
+}
